@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MCQ Practice Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;text-align:center;margin-top:60px;background:#f5f5f5}
+a{display:block;margin:15px auto;width:250px;font-size:18px;text-decoration:none;
+   padding:12px;border:1px solid #aaa;border-radius:6px;color:#000;background:#fff}
+</style>
+</head>
+<body>
+
+<h2>MCQ Practice</h2>
+
+<a href="neurology.html">Neurology</a>
+<a href="ophthalmology.html">Ophthalmology</a>
+<a href="gynecology.html">Obstetrics & Gynecology</a>
+<a href="derma.html">Dermatovenerology</a>
+<a href="ent.html">ENT</a>
+
+<p style="margin-top:40px;font-size:12px;color:#666">
+Created By Numan Raza [raza_x46]
+</p>
+
+</body>
+</html>
