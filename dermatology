@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dermatology MCQ Practice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;margin:20px;background:#f5f5f5}
+#card{background:#fff;border:1px solid #ccc;padding:20px;border-radius:8px}
+button{display:block;width:100%;margin:8px 0;padding:12px;border:1px solid #aaa;background:#f7f7f7;text-align:left;border-radius:4px;font-size:16px}
+.correct{background:#c8f7c5;border-color:#2e7d32}
+.wrong{background:#f7c5c5;border-color:#b71c1c}
+#next,#prev{margin-top:15px;padding:10px 15px;font-size:16px}
+#progress{margin-bottom:10px}
+#scoreBox{margin-bottom:10px;font-weight:bold}
+#review{display:none;background:#fff;border:1px solid #ccc;padding:20px;border-radius:8px;margin-top:20px}
+.review-item{border-bottom:1px solid #ddd;padding:10px 0}
+#credit{position:fixed;top:10px;right:15px;font-size:12px;color:#555;font-weight:bold}
+#jumpBox{margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<h2>Dermatology MCQ Practice</h2>
+<div id="credit">Created By Numan Raza [raza_x46]</div>
+
+<div id="jumpBox">
+Jump to question:
+<input type="number" id="jumpInput" min="1" style="width:60px">
+<button onclick="jumpTo()">Go</button>
+</div>
+
+<div id="scoreBox">Score: 0</div>
+<div id="progress"></div>
+
+<div id="card">
+  <div id="question"></div>
+  <div id="options"></div>
+</div>
+
+<button id="prev" onclick="prevQuestion()">Previous</button>
+<button id="next" onclick="nextQuestion()">Next Question</button>
+
+<div id="review">
+  <h3>Review – Wrong Answers</h3>
+  <div id="reviewList"></div>
+</div>
+
+<script>
+const questions = [
+  // === PASTE YOUR DERMATOLOGY MCQs HERE ===
+  // Example format:
+  // {q:"Question text", options:["A","B","C","D"], correctText:"B"}
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+let wrongAnswers = [];
+
+function shuffle(array){
+  return array.sort(()=>Math.random()-0.5);
+}
+
+function loadQuestion(){
+  answered = false;
+  const q = questions[current];
+  document.getElementById("question").innerText =
+    (current+1)+". "+q.q;
+
+  document.getElementById("progress").innerText =
+    "Question "+(current+1)+" of "+questions.length;
+
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  shuffle([...q.options]).forEach(opt=>{
+    const btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.onclick = ()=>checkAnswer(btn,opt,q.correctText);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(btn,selected,correct){
+  if(answered) return;
+  answered = true;
+
+  if(selected === correct){
+    btn.classList.add("correct");
+    score++;
+    document.getElementById("scoreBox").innerText = "Score: "+score;
+  } else {
+    btn.classList.add("wrong");
+    wrongAnswers.push({
+      q: questions[current].q,
+      your: selected,
+      correct: correct
+    });
+    [...document.querySelectorAll("#options button")].forEach(b=>{
+      if(b.innerText === correct) b.classList.add("correct");
+    });
+  }
+}
+
+function nextQuestion(){
+  if(current < questions.length-1){
+    current++;
+    loadQuestion();
+  } else {
+    showReview();
+  }
+}
+
+function prevQuestion(){
+  if(current > 0){
+    current--;
+    loadQuestion();
+  }
+}
+
+function jumpTo(){
+  const n = parseInt(document.getElementById("jumpInput").value);
+  if(n>=1 && n<=questions.length){
+    current = n-1;
+    loadQuestion();
+  }
+}
+
+function showReview(){
+  document.getElementById("review").style.display="block";
+  const list = document.getElementById("reviewList");
+  list.innerHTML="";
+  wrongAnswers.forEach((w,i)=>{
+    const d = document.createElement("div");
+    d.className="review-item";
+    d.innerHTML = `<b>${i+1}. ${w.q}</b><br>
+    Your answer: ${w.your}<br>
+    Correct answer: ${w.correct}`;
+    list.appendChild(d);
+  });
+}
+
+if(questions.length>0) loadQuestion();
+</script>
+
+</body>
+</html>
